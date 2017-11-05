@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import os
 import io
 import tarfile
@@ -6,6 +8,7 @@ import time
 
 BLOCKSIZE = 512
 NUL = "\0"
+buf = bytearray(4096)
 
 tar = open(sys.argv[1], "w")
 
@@ -14,8 +17,7 @@ ovf = sys.argv[2]
 info = tarfile.TarInfo(name="ovf")
 info.size = len(ovf.encode('utf-8'))
 info.mtime = time.time()
-buf = info.tobuf()
-tar.write(buf)
+tar.write(info.tobuf())
 tar.write(ovf)
 remainder = info.size % BLOCKSIZE
 if remainder > 0:
@@ -31,10 +33,8 @@ for arg in sys.argv[3:]:
     info = tarfile.TarInfo(name=basename)
     info.size = size
     info.mtime = time.time()
-    buf = info.tobuf()
-    tar.write(buf)
+    tar.write(info.tobuf())
     file = io.FileIO(fd, "r+")
-    buf = bytearray(4096)
     while 1:
         r = file.readinto(buf)
         if r == 0:
@@ -44,12 +44,10 @@ for arg in sys.argv[3:]:
     if remainder > 0:
         tar.write(NUL * (BLOCKSIZE - remainder))
 
-
 # writing two null blocks at the end of the file
 empty = NUL * 512
 tar.write(empty)
 tar.write(empty)
-
 
 tar.close()
 
