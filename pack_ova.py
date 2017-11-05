@@ -17,10 +17,9 @@ info.mtime = time.time()
 buf = info.tobuf()
 tar.write(buf)
 tar.write(ovf)
-blocks, remainder = divmod(info.size, BLOCKSIZE)
+remainder = info.size % BLOCKSIZE
 if remainder > 0:
     tar.write(NUL * (BLOCKSIZE - remainder))
-    blocks += 1
 
 for arg in sys.argv[3:]:
     idx = arg.index(':')
@@ -41,7 +40,7 @@ for arg in sys.argv[3:]:
         if r == 0:
             break
         tar.write(buf)
-    blocks, remainder = divmod(info.size, BLOCKSIZE)
+    remainder = info.size % BLOCKSIZE
     if remainder > 0:
         tar.write(NUL * (BLOCKSIZE - remainder))
 
