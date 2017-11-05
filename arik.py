@@ -1,10 +1,7 @@
 import os
 import io
-import shutil
-import tempfile
 import tarfile
 import sys
-import StringIO
 
 print 'starting'
 
@@ -49,23 +46,11 @@ for arg in sys.argv[2:]:
     offset += BLOCKSIZE * blocks
 
 
-#info = tarfile.TarInfo(name="disk2")
-#info.size=100000
-#buf = info.tobuf()
-#tar.write(buf)
-#offset += len(buf)
-## save the offset
-#tar.seek(offset + info.size)
-#blocks, remainder = divmod(info.size, BLOCKSIZE)
-#if remainder > 0:
-#    tar.write(NUL * (BLOCKSIZE - remainder))
-#    blocks += 1
-#offset += BLOCKSIZE * blocks
-
-
+# writing two null blocks at the end of the file
 empty = NUL * 512
 tar.write(empty)
 tar.write(empty)
+
 
 for file in file2offset:
     offset = file2offset[file]
@@ -79,38 +64,7 @@ for file in file2offset:
         r = file.readinto(buf)
         if r == 0:
             break
-#    file.seek(counter)
         tar.write(buf)
-
-   
-
-#fd = os.open("3a09f002-044d-478d-8733-58f4333941ee", os.O_RDWR | os.O_DIRECT)
-#fd = os.open("3a09f002-044d-478d-8733-58f4333941ee", os.O_RDWR)
-#file = io.FileIO(fd, "r+")
-#file = io.FileIO(fd, "r+", closefd=True)
-
-print 'creating temporary file'
-fd2 = os.open("sss", os.O_WRONLY | os.O_CREAT)
-file2 = io.FileIO(fd2, "w+", closefd=True)
-
-
-print 'copying file'
-buf = bytearray(4096)
-mview = memoryview(buf)
-counter=0
-#while 1:
-#    r = file.readinto(mview)
-#    print r
-#    if r == 0:
-#        break
-#    counter = counter + r
-#    file.seek(counter)
-#    file2.write(mview)
-
-#r = file.readinto(mview)
-#print r
-#counter = counter + r
-#tar.write(mview)
 
 tar.close()
 
