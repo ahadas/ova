@@ -10,7 +10,8 @@ BLOCKSIZE = 512
 NUL = "\0"
 buf = bytearray(4096)
 
-tar = open(sys.argv[1], "w")
+fd = os.open(sys.argv[1], os.O_WRONLY | os.O_CREAT)
+tar = io.FileIO(fd, "w")
 
 print 'writing ovf'
 ovf = sys.argv[2]
