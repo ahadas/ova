@@ -1,3 +1,7 @@
 # ova
 
-/rhev/data-center/59b50283-0335-0017-0204-0000000002d6/3d35df2d-931c-4dcb-be3b-bd613733bd44/images/bc5b7180-f252-4529-942f-0ee097d8d150
+How to use:
+pack_ova.py <ova filename> <ovf string> <disk path : disk size>
+
+Example:
+pack.ova.py test.ova <ovf>...</ovf> disk0:1073741824
