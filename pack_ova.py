@@ -36,8 +36,7 @@ for arg in sys.argv[3:]:
     tar.write(info.tobuf())
     file = io.FileIO(fd, "r+")
     while 1:
-        r = file.readinto(buf)
-        if r == 0:
+        if file.readinto(buf) == 0:
             break
         tar.write(buf)
     remainder = info.size % BLOCKSIZE
