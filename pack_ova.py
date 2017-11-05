@@ -28,7 +28,7 @@ for arg in sys.argv[3:]:
     path = arg[:idx]
     size = int(arg[idx+1:])
     print 'writing disk %s (%d)' % (path, size)
-    fd = os.open(path, os.O_RDWR)
+    fd = os.open(path, os.O_RDONLY)
     basename = os.path.basename(path)
     info = tarfile.TarInfo(name=basename)
     info.size = size
