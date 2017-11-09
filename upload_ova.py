@@ -68,7 +68,7 @@ vm = vms_service.add(
         ),
         initialization = types.Initialization(
             configuration = types.Configuration(
-                type = types.ConfigurationType.OVF,
+                type = types.ConfigurationType.OVA,
                 data = ovf
             )
         ),
