@@ -5,6 +5,8 @@ import tarfile
 import re
 import ovirtsdk4 as sdk
 import ovirtsdk4.types as types
+import ovirtsdk4.types.DiskFormat.COW as COW
+import ovirtsdk4.types.DiskFormat.RAW as RAW
 import logging
 import time
 
@@ -23,7 +25,6 @@ entries = tar.getmembers()
 
 f = tar.extractfile(entries[0])
 ovf = f.read()
-print "content: %s" %(ovf)
 
 diskSection = re.findall("\<DiskSection>.*?\</DiskSection>", ovf)[0]
 disks = re.findall("\<Disk (.*?)\>\</Disk>", diskSection)
@@ -35,11 +36,11 @@ for disk in disks:
     print props
     print int(props['actual_size']) * 2**30
     d = disks_service.add(
-        disk = types.Disk(
+        disk=types.Disk(
             id=props['diskId'],
             name=props['disk-alias'],
             description=props['description'],
-            format=types.DiskFormat.COW if props['volume-format']=='COW' else types.DiskFormat.RAW,
+            format=COW if props['volume-format'] == 'COW' else RAW,
             provisioned_size=int(props['size']) * 2**30,
             initial_size=int(props['actual_size']) * 2**30,
             storage_domains=[
@@ -50,7 +51,7 @@ for disk in disks:
         )
     )
 
-#disk_service = disks_service.disk_service(d.id)
+# disk_service = disks_service.disk_service(d.id)
 while True:
     break
     time.sleep(5)
@@ -66,10 +67,10 @@ vm = vms_service.add(
         cluster=types.Cluster(
             name='Default',
         ),
-        initialization = types.Initialization(
-            configuration = types.Configuration(
-                type = types.ConfigurationType.OVA,
-                data = ovf
+        initialization=types.Initialization(
+            configuration=types.Configuration(
+                type=types.ConfigurationType.OVA,
+                data=ovf
             )
         ),
     ),
